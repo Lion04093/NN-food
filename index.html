@@ -5,15 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>隨機美食選餐器</title>
 
-  <!-- PWA 必備標籤與 Manifest 連結 -->
   <link rel="manifest" href="manifest.json">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="NN選餐">
   <meta name="theme-color" content="#ea580c">
-  <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/1046/1046857.png">
-  <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/1046/1046857.png" type="image/png">
+  <link rel="apple-touch-icon" href="icon.png">
+  <link rel="icon" href="icon.png" type="image/png">
 
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
@@ -37,63 +36,108 @@
       border-color: #fed7aa;
       color: #c2410c;
     }
+    /* 限制評論最多顯示 3 行，多餘的變點點點 */
+    .line-clamp-3 {
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
   </style>
 </head>
 <body class="bg-orange-50 min-h-screen flex flex-col items-center p-4 md:p-8 font-sans">
 
-  <header class="text-center mb-8 animate__animated animate__fadeIn mt-4">
-    <h1 class="text-4xl font-black text-orange-600 mb-2">🍴 美食 & 飲料隨機選</h1>
-    <p class="text-gray-500 text-sm">再也不用煩惱等一下要點什麼！</p>
+  <header class="text-center mb-6 animate__animated animate__fadeIn mt-2">
+    <h1 class="text-3xl font-black text-orange-600 mb-1">🍴 美食 & 飲料隨機選</h1>
+    <p class="text-gray-500 text-xs">為您推薦附近評分最高的好店</p>
   </header>
 
-  <main class="w-full max-w-md glass-morphism rounded-3xl shadow-xl p-6 mb-8 animate__animated animate__zoomIn">
+  <main class="w-full max-w-md glass-morphism rounded-3xl shadow-xl p-5 mb-8 animate__animated animate__zoomIn">
     
-    <div id="locationStatus" class="text-xs text-center py-2 px-4 rounded-full bg-gray-100 text-gray-500 mb-6">
+    <div id="locationStatus" class="text-xs text-center py-2 px-4 rounded-full bg-gray-100 text-gray-500 mb-5">
       正在取得您的位置...
     </div>
 
-    <div class="mb-6" id="cuisineBox">
-      <label class="block text-sm font-bold text-gray-700 mb-3">想要哪種料理類型？</label>
+    <div class="mb-5" id="cuisineBox">
       <div class="grid grid-cols-4 gap-2">
-        <button onclick="selectCuisine(this, '全部')" class="cuisine-btn active py-2 px-1 text-xs rounded-lg border-2 border-orange-200 bg-white text-orange-700 font-medium hover:bg-orange-100 transition-all shadow-sm">全部</button>
-        <button onclick="selectCuisine(this, '中式')" class="cuisine-btn py-2 px-1 text-xs rounded-lg border-2 border-transparent bg-white text-gray-600 font-medium hover:bg-orange-100 transition-all shadow-sm">中式</button>
-        <button onclick="selectCuisine(this, '西式')" class="cuisine-btn py-2 px-1 text-xs rounded-lg border-2 border-transparent bg-white text-gray-600 font-medium hover:bg-orange-100 transition-all shadow-sm">西式</button>
-        <button onclick="selectCuisine(this, '義式')" class="cuisine-btn py-2 px-1 text-xs rounded-lg border-2 border-transparent bg-white text-gray-600 font-medium hover:bg-orange-100 transition-all shadow-sm">義式</button>
-        <button onclick="selectCuisine(this, '日式')" class="cuisine-btn py-2 px-1 text-xs rounded-lg border-2 border-transparent bg-white text-gray-600 font-medium hover:bg-orange-100 transition-all shadow-sm">日式</button>
-        <button onclick="selectCuisine(this, '小吃')" class="cuisine-btn py-2 px-1 text-xs rounded-lg border-2 border-transparent bg-white text-gray-600 font-medium hover:bg-orange-100 transition-all shadow-sm">小吃</button>
-        <button onclick="selectCuisine(this, '炸物')" class="cuisine-btn py-2 px-1 text-xs rounded-lg border-2 border-transparent bg-white text-gray-600 font-medium hover:bg-orange-100 transition-all shadow-sm">炸物</button>
-        <button onclick="selectCuisine(this, '酒吧')" class="cuisine-btn py-2 px-1 text-xs rounded-lg border-2 border-transparent bg-white text-gray-600 font-medium hover:bg-orange-100 transition-all shadow-sm">酒吧</button>
+        <button onclick="selectCuisine(this, '全部')" class="cuisine-btn active py-2 px-1 text-[11px] rounded-lg border-2 border-orange-200 bg-white text-orange-700 font-bold hover:bg-orange-100 transition-all shadow-sm">全部</button>
+        <button onclick="selectCuisine(this, '中式')" class="cuisine-btn py-2 px-1 text-[11px] rounded-lg border-2 border-transparent bg-white text-gray-600 font-bold hover:bg-orange-100 transition-all shadow-sm">中式</button>
+        <button onclick="selectCuisine(this, '西式')" class="cuisine-btn py-2 px-1 text-[11px] rounded-lg border-2 border-transparent bg-white text-gray-600 font-bold hover:bg-orange-100 transition-all shadow-sm">西式</button>
+        <button onclick="selectCuisine(this, '義式')" class="cuisine-btn py-2 px-1 text-[11px] rounded-lg border-2 border-transparent bg-white text-gray-600 font-bold hover:bg-orange-100 transition-all shadow-sm">義式</button>
+        <button onclick="selectCuisine(this, '日式')" class="cuisine-btn py-2 px-1 text-[11px] rounded-lg border-2 border-transparent bg-white text-gray-600 font-bold hover:bg-orange-100 transition-all shadow-sm">日式</button>
+        <button onclick="selectCuisine(this, '小吃')" class="cuisine-btn py-2 px-1 text-[11px] rounded-lg border-2 border-transparent bg-white text-gray-600 font-bold hover:bg-orange-100 transition-all shadow-sm">小吃</button>
+        <button onclick="selectCuisine(this, '炸物')" class="cuisine-btn py-2 px-1 text-[11px] rounded-lg border-2 border-transparent bg-white text-gray-600 font-bold hover:bg-orange-100 transition-all shadow-sm">炸物</button>
+        <button onclick="selectCuisine(this, '酒吧')" class="cuisine-btn py-2 px-1 text-[11px] rounded-lg border-2 border-transparent bg-white text-gray-600 font-bold hover:bg-orange-100 transition-all shadow-sm">酒吧</button>
       </div>
     </div>
 
     <div class="flex flex-col gap-3">
-      <button id="foodBtn" onclick="pick('food')" disabled class="w-full bg-orange-500 text-white font-bold py-4 rounded-2xl shadow-lg hover:bg-orange-600 transition-all btn-active disabled:opacity-50 disabled:cursor-not-allowed text-lg">
+      <button id="foodBtn" onclick="pick('food')" disabled class="w-full bg-orange-500 text-white font-bold py-3.5 rounded-2xl shadow-lg hover:bg-orange-600 transition-all btn-active disabled:opacity-50 disabled:cursor-not-allowed text-base">
         幫我選一間餐廳！
       </button>
-      <button id="drinkBtn" onclick="pick('drink')" disabled class="w-full bg-blue-500 text-white font-bold py-3 rounded-2xl shadow-lg hover:bg-blue-600 transition-all btn-active disabled:opacity-50 disabled:cursor-not-allowed text-lg">
+      <button id="drinkBtn" onclick="pick('drink')" disabled class="w-full bg-blue-500 text-white font-bold py-3 rounded-2xl shadow-lg hover:bg-blue-600 transition-all btn-active disabled:opacity-50 disabled:cursor-not-allowed text-base">
         我想喝飲料！🧋
       </button>
     </div>
 
-    <div id="loadingUI" class="hidden flex-col items-center mt-8 animate__animated animate__fadeIn">
-      <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12 mb-4"></div>
-      <p id="loadingText" class="text-orange-600 font-bold">正在挑選中...</p>
+    <div id="loadingUI" class="hidden flex-col items-center mt-6 animate__animated animate__fadeIn">
+      <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-10 w-10 mb-3"></div>
+      <p id="loadingText" class="text-orange-600 font-bold text-sm">正在收集店家評價與照片...</p>
     </div>
 
-    <div id="resultCard" class="hidden mt-8 p-5 bg-white rounded-2xl border border-orange-100 shadow-inner animate__animated animate__bounceIn">
-      <div class="flex justify-between items-start mb-2">
-        <span id="resTag" class="text-[10px] bg-orange-100 text-orange-600 px-2 py-1 rounded font-bold uppercase tracking-wider">今日推薦</span>
-        <div class="flex items-center text-yellow-500">
-          <span class="text-sm font-bold" id="resRating">4.5</span>
-          <svg class="w-4 h-4 ml-1 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+    <!-- 全新升級的結果卡片 -->
+    <div id="resultCard" class="hidden mt-6 bg-white rounded-2xl border border-orange-100 shadow-xl overflow-hidden animate__animated animate__bounceIn">
+      
+      <!-- 餐廳圖片區 -->
+      <div id="photoContainer" class="w-full h-40 bg-gray-200 relative hidden">
+        <img id="resPhoto" src="" class="w-full h-full object-cover" alt="餐廳照片">
+        <div class="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/70 to-transparent p-3 pt-8">
+          <h2 id="resName" class="text-2xl font-black text-white leading-tight drop-shadow-md">餐廳名稱</h2>
         </div>
       </div>
-      <h2 id="resName" class="text-2xl font-black text-gray-800 mb-2 leading-tight">餐廳名稱</h2>
-      <p id="resAddress" class="text-gray-500 text-sm mb-4">地址載入中...</p>
-      
-      <a id="resMap" href="#" target="_blank" class="block w-full text-center bg-gray-800 text-white py-3 rounded-xl font-bold hover:bg-black transition-all">
-        開啟地圖導航
-      </a>
+
+      <div class="p-4">
+        <!-- 如果沒有圖片，名稱會顯示在這裡 -->
+        <h2 id="resNameNoPhoto" class="text-2xl font-black text-gray-800 mb-2 leading-tight hidden">餐廳名稱</h2>
+        
+        <div class="flex justify-between items-center mb-3">
+          <span id="resTag" class="text-[10px] bg-orange-100 text-orange-600 px-2 py-1 rounded font-bold uppercase tracking-wider">今日推薦</span>
+          <div class="flex items-center text-yellow-500 bg-yellow-50 px-2 py-1 rounded-lg">
+            <span class="text-sm font-bold" id="resRating">4.5</span>
+            <svg class="w-4 h-4 ml-1 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+          </div>
+        </div>
+
+        <!-- 推薦亮點/摘要 -->
+        <div class="bg-orange-50 p-3 rounded-xl mb-4 border border-orange-100">
+          <p class="text-xs text-orange-800 font-black mb-1 flex items-center">
+            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+            招牌與推薦亮點
+          </p>
+          <p id="resSummary" class="text-xs text-gray-700 font-medium leading-relaxed"></p>
+        </div>
+
+        <!-- 評論區 -->
+        <div class="space-y-2 mb-5">
+          <div class="bg-green-50 border-l-4 border-green-500 p-2.5 rounded-r-xl">
+            <span class="text-[10px] font-black text-green-700 bg-green-200 px-1.5 py-0.5 rounded">👍 最高分評論</span>
+            <p id="resBestReview" class="text-xs text-gray-600 mt-1.5 line-clamp-3 italic"></p>
+          </div>
+          <div class="bg-red-50 border-l-4 border-red-400 p-2.5 rounded-r-xl">
+            <span class="text-[10px] font-black text-red-700 bg-red-200 px-1.5 py-0.5 rounded">🤔 最低分/避雷</span>
+            <p id="resWorstReview" class="text-xs text-gray-600 mt-1.5 line-clamp-3 italic"></p>
+          </div>
+        </div>
+        
+        <p id="resAddress" class="text-gray-400 text-[11px] mb-3 text-center flex items-center justify-center">
+          <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path></svg>
+          <span id="addressText">地址載入中...</span>
+        </p>
+
+        <a id="resMap" href="#" target="_blank" class="block w-full text-center bg-gray-800 text-white py-3.5 rounded-xl font-bold hover:bg-black transition-all shadow-md">
+          📍 開啟 Google 地圖導航
+        </a>
+      </div>
     </div>
 
     <div id="errorUI" class="hidden mt-6 p-4 bg-red-50 text-red-600 rounded-xl text-sm border border-red-100">
@@ -101,19 +145,18 @@
     </div>
   </main>
 
-  <footer class="text-gray-400 text-xs">
+  <footer class="text-gray-400 text-[10px] pb-4">
     &copy; 2026 NN 隨機選餐系統
   </footer>
 
   <script>
-    // 註冊 Service Worker (PWA 的核心)
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('sw.js').catch(err => console.log('SW 註冊失敗', err));
       });
     }
 
-    // 您專屬的 Google Apps Script 後端網址
+    // ⚠️ 請換成您的 GAS 網址 ⚠️
     const GAS_API_URL = "https://script.google.com/macros/s/AKfycbxufIU4ZU4uXKMk8lozqpdQtfihdCwDUuB9NHHybmcMpobuwfbIZVXD2TLHP12qtQ_v/exec";
 
     let userCoords = null;
@@ -126,14 +169,14 @@
             userCoords = { lat: pos.coords.latitude, lng: pos.coords.longitude };
             const statusBox = document.getElementById('locationStatus');
             statusBox.innerHTML = '📍 已取得定位：您的附近美食';
-            statusBox.className = 'text-xs text-center py-2 px-4 rounded-full bg-green-100 text-green-600 mb-6';
+            statusBox.className = 'text-xs text-center py-2 px-4 rounded-full bg-green-100 text-green-600 mb-5 shadow-inner';
             document.getElementById('foodBtn').disabled = false;
             document.getElementById('drinkBtn').disabled = false;
           },
           (err) => {
             const statusBox = document.getElementById('locationStatus');
             statusBox.innerHTML = '❌ 無法定位，將無法提供準確結果';
-            statusBox.className = 'text-xs text-center py-2 px-4 rounded-full bg-red-100 text-red-600 mb-6';
+            statusBox.className = 'text-xs text-center py-2 px-4 rounded-full bg-red-100 text-red-600 mb-5 shadow-inner';
           }
         );
       }
@@ -156,19 +199,16 @@
       const loadingUI = document.getElementById('loadingUI');
       const resultCard = document.getElementById('resultCard');
       const errorUI = document.getElementById('errorUI');
-      const loadingText = document.getElementById('loadingText');
-
+      
       foodBtn.disabled = true;
       drinkBtn.disabled = true;
-      loadingText.innerText = mode === 'drink' ? '正在尋找解渴的飲料...' : '正在挑選美味的餐點...';
+      document.getElementById('loadingText').innerText = mode === 'drink' ? '正在尋找附近好喝的飲料...' : '正在收集店家評價與照片...';
       loadingUI.classList.remove('hidden');
       resultCard.classList.add('hidden');
       errorUI.classList.add('hidden');
 
-      // 組合 API 請求網址
       const queryUrl = `${GAS_API_URL}?lat=${userCoords.lat}&lng=${userCoords.lng}&cuisine=${encodeURIComponent(selectedCuisine)}&mode=${mode}`;
 
-      // 使用原生 Fetch API 呼叫後端
       fetch(queryUrl)
         .then(res => res.json())
         .then(response => {
@@ -178,9 +218,24 @@
 
           if (response.success) {
             const data = response.data;
-            document.getElementById('resName').innerText = data.name;
-            document.getElementById('resAddress').innerText = data.address;
+            
+            // 處理圖片顯示邏輯
+            if (data.photoUrl) {
+              document.getElementById('resPhoto').src = data.photoUrl;
+              document.getElementById('photoContainer').classList.remove('hidden');
+              document.getElementById('resName').innerText = data.name;
+              document.getElementById('resNameNoPhoto').classList.add('hidden');
+            } else {
+              document.getElementById('photoContainer').classList.add('hidden');
+              document.getElementById('resNameNoPhoto').innerText = data.name;
+              document.getElementById('resNameNoPhoto').classList.remove('hidden');
+            }
+
+            document.getElementById('addressText').innerText = data.address;
             document.getElementById('resRating').innerText = data.rating;
+            document.getElementById('resSummary').innerText = data.summary;
+            document.getElementById('resBestReview').innerText = '"' + data.bestReview + '"';
+            document.getElementById('resWorstReview').innerText = '"' + data.worstReview + '"';
             
             const tag = document.getElementById('resTag');
             if (data.mode === 'drink') {
@@ -201,8 +256,7 @@
           loadingUI.classList.add('hidden');
           foodBtn.disabled = false;
           drinkBtn.disabled = false;
-          showError("系統連線逾時或發生錯誤，請稍後再試。");
-          console.error(err);
+          showError("系統連線逾時，請稍後再試。");
         });
     }
 
