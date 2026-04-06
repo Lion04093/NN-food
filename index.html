@@ -31,12 +31,11 @@
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
-    .cuisine-btn.active {
+    .cuisine-btn.active, .price-btn.active {
       background-color: #ffedd5;
       border-color: #fed7aa;
       color: #c2410c;
     }
-    /* 限制評論最多顯示 3 行，多餘的變點點點 */
     .line-clamp-3 {
       display: -webkit-box;
       -webkit-line-clamp: 3;
@@ -49,7 +48,7 @@
 
   <header class="text-center mb-6 animate__animated animate__fadeIn mt-2">
     <h1 class="text-3xl font-black text-orange-600 mb-1">🍴 美食 & 飲料隨機選</h1>
-    <p class="text-gray-500 text-xs">為您推薦附近評分最高的好店</p>
+    <p class="text-gray-500 text-xs">為您推薦附近評分大於 3 星的好店</p>
   </header>
 
   <main class="w-full max-w-md glass-morphism rounded-3xl shadow-xl p-5 mb-8 animate__animated animate__zoomIn">
@@ -58,7 +57,9 @@
       正在取得您的位置...
     </div>
 
-    <div class="mb-5" id="cuisineBox">
+    <!-- 料理選擇器 -->
+    <div class="mb-4" id="cuisineBox">
+      <label class="block text-xs font-bold text-gray-700 mb-2">想吃哪種料理？</label>
       <div class="grid grid-cols-4 gap-2">
         <button onclick="selectCuisine(this, '全部')" class="cuisine-btn active py-2 px-1 text-[11px] rounded-lg border-2 border-orange-200 bg-white text-orange-700 font-bold hover:bg-orange-100 transition-all shadow-sm">全部</button>
         <button onclick="selectCuisine(this, '中式')" class="cuisine-btn py-2 px-1 text-[11px] rounded-lg border-2 border-transparent bg-white text-gray-600 font-bold hover:bg-orange-100 transition-all shadow-sm">中式</button>
@@ -68,6 +69,18 @@
         <button onclick="selectCuisine(this, '小吃')" class="cuisine-btn py-2 px-1 text-[11px] rounded-lg border-2 border-transparent bg-white text-gray-600 font-bold hover:bg-orange-100 transition-all shadow-sm">小吃</button>
         <button onclick="selectCuisine(this, '炸物')" class="cuisine-btn py-2 px-1 text-[11px] rounded-lg border-2 border-transparent bg-white text-gray-600 font-bold hover:bg-orange-100 transition-all shadow-sm">炸物</button>
         <button onclick="selectCuisine(this, '酒吧')" class="cuisine-btn py-2 px-1 text-[11px] rounded-lg border-2 border-transparent bg-white text-gray-600 font-bold hover:bg-orange-100 transition-all shadow-sm">酒吧</button>
+      </div>
+    </div>
+
+    <!-- 價位選擇器 -->
+    <div class="mb-5" id="priceBox">
+      <label class="block text-xs font-bold text-gray-700 mb-2">預算大約多少？<span class="text-[10px] text-gray-400 font-normal ml-1">(飲料不限)</span></label>
+      <div class="grid grid-cols-5 gap-1.5">
+        <button onclick="selectPrice(this, 'all')" class="price-btn active py-2 px-1 text-[10px] rounded-lg border-2 border-orange-200 bg-white text-orange-700 font-bold hover:bg-orange-100 transition-all shadow-sm">全部</button>
+        <button onclick="selectPrice(this, '1')" class="price-btn py-2 px-1 text-[10px] rounded-lg border-2 border-transparent bg-white text-gray-600 font-bold hover:bg-orange-100 transition-all shadow-sm">1~200</button>
+        <button onclick="selectPrice(this, '2')" class="price-btn py-2 px-1 text-[10px] rounded-lg border-2 border-transparent bg-white text-gray-600 font-bold hover:bg-orange-100 transition-all shadow-sm">200~400</button>
+        <button onclick="selectPrice(this, '3')" class="price-btn py-2 px-1 text-[10px] rounded-lg border-2 border-transparent bg-white text-gray-600 font-bold hover:bg-orange-100 transition-all shadow-sm">400~600</button>
+        <button onclick="selectPrice(this, '4')" class="price-btn py-2 px-1 text-[10px] rounded-lg border-2 border-transparent bg-white text-gray-600 font-bold hover:bg-orange-100 transition-all shadow-sm">600以上</button>
       </div>
     </div>
 
@@ -85,10 +98,7 @@
       <p id="loadingText" class="text-orange-600 font-bold text-sm">正在收集店家評價與照片...</p>
     </div>
 
-    <!-- 全新升級的結果卡片 -->
     <div id="resultCard" class="hidden mt-6 bg-white rounded-2xl border border-orange-100 shadow-xl overflow-hidden animate__animated animate__bounceIn">
-      
-      <!-- 餐廳圖片區 -->
       <div id="photoContainer" class="w-full h-40 bg-gray-200 relative hidden">
         <img id="resPhoto" src="" class="w-full h-full object-cover" alt="餐廳照片">
         <div class="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/70 to-transparent p-3 pt-8">
@@ -97,7 +107,6 @@
       </div>
 
       <div class="p-4">
-        <!-- 如果沒有圖片，名稱會顯示在這裡 -->
         <h2 id="resNameNoPhoto" class="text-2xl font-black text-gray-800 mb-2 leading-tight hidden">餐廳名稱</h2>
         
         <div class="flex justify-between items-center mb-3">
@@ -108,7 +117,6 @@
           </div>
         </div>
 
-        <!-- 推薦亮點/摘要 -->
         <div class="bg-orange-50 p-3 rounded-xl mb-4 border border-orange-100">
           <p class="text-xs text-orange-800 font-black mb-1 flex items-center">
             <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
@@ -117,7 +125,6 @@
           <p id="resSummary" class="text-xs text-gray-700 font-medium leading-relaxed"></p>
         </div>
 
-        <!-- 評論區 -->
         <div class="space-y-2 mb-5">
           <div class="bg-green-50 border-l-4 border-green-500 p-2.5 rounded-r-xl">
             <span class="text-[10px] font-black text-green-700 bg-green-200 px-1.5 py-0.5 rounded">👍 最高分評論</span>
@@ -156,11 +163,11 @@
       });
     }
 
-    // ⚠️ 請換成您的 GAS 網址 ⚠️
     const GAS_API_URL = "https://script.google.com/macros/s/AKfycbxufIU4ZU4uXKMk8lozqpdQtfihdCwDUuB9NHHybmcMpobuwfbIZVXD2TLHP12qtQ_v/exec";
 
     let userCoords = null;
     let selectedCuisine = '全部';
+    let selectedPrice = 'all';
 
     window.onload = function() {
       if (navigator.geolocation) {
@@ -191,6 +198,15 @@
       btn.classList.add('active', 'border-orange-200', 'bg-orange-100', 'text-orange-700');
     }
 
+    function selectPrice(btn, value) {
+      selectedPrice = value;
+      document.querySelectorAll('.price-btn').forEach(b => {
+        b.classList.remove('active', 'border-orange-200', 'bg-orange-100', 'text-orange-700');
+        b.classList.add('border-transparent', 'bg-white', 'text-gray-600');
+      });
+      btn.classList.add('active', 'border-orange-200', 'bg-orange-100', 'text-orange-700');
+    }
+
     function pick(mode) {
       if (!userCoords) return;
 
@@ -207,7 +223,8 @@
       resultCard.classList.add('hidden');
       errorUI.classList.add('hidden');
 
-      const queryUrl = `${GAS_API_URL}?lat=${userCoords.lat}&lng=${userCoords.lng}&cuisine=${encodeURIComponent(selectedCuisine)}&mode=${mode}`;
+      // 組合 API 請求，把 price 也傳遞過去
+      const queryUrl = `${GAS_API_URL}?lat=${userCoords.lat}&lng=${userCoords.lng}&cuisine=${encodeURIComponent(selectedCuisine)}&mode=${mode}&price=${selectedPrice}`;
 
       fetch(queryUrl)
         .then(res => res.json())
@@ -219,7 +236,6 @@
           if (response.success) {
             const data = response.data;
             
-            // 處理圖片顯示邏輯
             if (data.photoUrl) {
               document.getElementById('resPhoto').src = data.photoUrl;
               document.getElementById('photoContainer').classList.remove('hidden');
